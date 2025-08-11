@@ -1,0 +1,23 @@
+name: Branch Test Workflow
+
+on:
+  push:
+    branches: [ "dev", "qa" ]  # this is the trigger
+
+jobs:
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show branch info
+        run: echo "You pushed to branch: ${{ github.ref_name }}"
+
+      - name: Run branch-specific logic
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
+            echo "🚀 Deploying to DEV environment..."
+          elif [[ "${GITHUB_REF_NAME}" == "qa" ]]; then
+            echo "🚀 Deploying to QA environment..."
+          else
+            echo "❌ Unknown branch"
+            exit 1
+          fi
