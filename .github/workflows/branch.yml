@@ -1,5 +1,4 @@
-
-name: Deploy Dataflow (Manual Env Choice - Simulation)
+name: Deploy Dataflow (Manual Env Choice)
 
 on:
   workflow_dispatch:
@@ -19,24 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set environment variables
+      - name: Show selected environment
         run: |
-          if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
-            echo "ENV=dev" >> $GITHUB_ENV
-            echo "GCP_PROJECT=my-dev-project-id" >> $GITHUB_ENV
-            echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
-          elif [[ "${{ github.event.inputs.environment }}" == "qa" ]]; then
-            echo "ENV=qa" >> $GITHUB_ENV
-            echo "GCP_PROJECT=my-qa-project-id" >> $GITHUB_ENV
-            echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
-          fi
-
-      - name: Simulate Job Start
-        run: |
-          echo "===================================="
-          echo "🚀 Your Dataflow job is starting..."
-          echo "Target Environment: $ENV"
-          echo "GCP Project: $GCP_PROJECT"
-          echo "Bucket: $BUCKET"
-          echo "===================================="
-          echo "✅ This is a simulation — no real job was run."
+          echo "🚀 You selected: ${{ github.event.inputs.environment }}"
