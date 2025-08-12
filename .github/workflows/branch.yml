@@ -20,7 +20,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "🌍 Selected environment: ${{ github.event.inputs.environment }}"
+          echo " Selected environment: ${{ github.event.inputs.environment }}"
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
             echo "PROJECT_ID=${{ secrets.GCP_DEV_PROJECT_ID }}" >> $GITHUB_ENV
@@ -37,8 +37,8 @@ jobs:
 
       - name: Verify environment variables are available
         run: |
-          echo "✅ ENV: $ENV"
-          echo "✅ PROJECT_ID: $PROJECT_ID"
-          echo "✅ REGION: $REGION"
-          echo "✅ SA_EMAIL: $SA_EMAIL"
-          echo "✅ BUCKET: $BUCKET"
+          echo "ENV: $ENV"
+          echo "PROJECT_ID: $PROJECT_ID"
+          echo "REGION: $REGION"
+          echo "SA_EMAIL: $SA_EMAIL"
+          echo "BUCKET: $BUCKET"
