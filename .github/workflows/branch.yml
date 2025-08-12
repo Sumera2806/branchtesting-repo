@@ -12,28 +12,41 @@ on:
           - dev
           - qa
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Set environment variables based on selection
       - name: Set environment variables
         run: |
-          echo "Running with environment: ${{ github.event.inputs.environment }}"
+          echo "🔹 Selected environment: ${{ github.event.inputs.environment }}"
 
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
-            echo "GCP_PROJECT=my-dev-project" >> $GITHUB_ENV
+            echo "PROJECT_ID=my-dev-project" >> $GITHUB_ENV
+            echo "REGION=us-central1" >> $GITHUB_ENV
+            echo "SA_EMAIL=dev-sa@my-dev-project.iam.gserviceaccount.com" >> $GITHUB_ENV
             echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
             echo "SA_KEY=dev-secret" >> $GITHUB_ENV
           else
             echo "ENV=qa" >> $GITHUB_ENV
-            echo "GCP_PROJECT=my-qa-project" >> $GITHUB_ENV
+            echo "PROJECT_ID=my-qa-project" >> $GITHUB_ENV
+            echo "REGION=us-central1" >> $GITHUB_ENV
+            echo "SA_EMAIL=qa-sa@my-qa-project.iam.gserviceaccount.com" >> $GITHUB_ENV
             echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
             echo "SA_KEY=qa-secret" >> $GITHUB_ENV
           fi
 
-          echo "Variables set in GITHUB_ENV:"
+          echo "✅ Variables written to GITHUB_ENV"
           cat $GITHUB_ENV
+
+     
