@@ -12,24 +12,16 @@ on:
           - dev
           - qa
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout repo
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Step 2: Set environment variables based on selection
+      # Set environment-specific variables
       - name: Set environment variables
         run: |
-          echo "🔹 Selected environment: ${{ github.event.inputs.environment }}"
-
+          echo "🌍 Selected environment: ${{ github.event.inputs.environment }}"
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
             echo "PROJECT_ID=my-dev-project" >> $GITHUB_ENV
@@ -46,7 +38,12 @@ jobs:
             echo "SA_KEY=qa-secret" >> $GITHUB_ENV
           fi
 
-          echo "✅ Variables written to GITHUB_ENV"
-          cat $GITHUB_ENV
-
-     
+      # Test using the variables
+      - name: Verify environment variables are available
+        run: |
+          echo "✅ ENV: $ENV"
+          echo "✅ PROJECT_ID: $PROJECT_ID"
+          echo "✅ REGION: $REGION"
+          echo "✅ SA_EMAIL: $SA_EMAIL"
+          echo "✅ BUCKET: $BUCKET"
+          echo "✅ SA_KEY: $SA_KEY"
