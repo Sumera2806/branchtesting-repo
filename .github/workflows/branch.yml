@@ -1,0 +1,24 @@
+name: Deploy Dataflow to Dev & QA
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, qa]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Simulate Deployment
+        run: |
+          echo "🚀 Deploying Dataflow job to ${{ matrix.env }} environment"
+          echo "Branch: ${{ github.ref_name }}"
+          sleep 1
+          echo "✅ Deployment complete for ${{ matrix.env }}"
