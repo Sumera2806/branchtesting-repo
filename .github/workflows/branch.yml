@@ -1,23 +1,25 @@
-name: Branch Test Workflow
+name: Test Dataflow Deployment (Matrix)
 
 on:
   push:
-    branches: [ "dev", "qa" ]  # this is the trigger
+    branches:
+      - dev
+      - qa
+  workflow_dispatch: # lets you trigger manually too
 
 jobs:
-  test-job:
+  deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [dev, qa] # will run both in parallel
     steps:
-      - name: Show branch info
-        run: echo "You pushed to branch: ${{ github.ref_name }}"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Run branch-specific logic
+      - name: Simulate Deployment
         run: |
-          if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
-            echo "🚀 Deploying to DEV environment..."
-          elif [[ "${GITHUB_REF_NAME}" == "qa" ]]; then
-            echo "🚀 Deploying to QA environment..."
-          else
-            echo "❌ Unknown branch"
-            exit 1
-          fi
+          echo "🚀 Deploying Dataflow job to ${{ matrix.env }} environment"
+          echo "Branch: ${{ github.ref_name }}"
+          sleep 1
+          echo "✅ Deployment simulation complete for ${{ matrix.env }}"
