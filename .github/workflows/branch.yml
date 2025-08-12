@@ -1,6 +1,9 @@
 name: Deploy Dataflow (Manual Env Choice)
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       environment:
@@ -11,6 +14,7 @@ on:
         options:
           - dev
           - qa
+
 
 jobs:
   deploy:
@@ -31,6 +35,6 @@ jobs:
 
       - name: Deploy Dataflow Job
         run: |
-          echo "🚀 Deploying Dataflow job to $ENV environment"
+          echo " Deploying Dataflow job to $ENV environment"
           echo "Using bucket: $BUCKET"
-          echo "✅ Deployment complete for $ENV"
+          echo " Deployment complete for $ENV"
