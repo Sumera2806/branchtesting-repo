@@ -24,4 +24,13 @@ jobs:
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
             echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
-          elif [[ "${{ github.event.inputs.en]()]()
+          elif [[ "${{ github.event.inputs.environment }}" == "qa" ]]; then
+            echo "ENV=qa" >> $GITHUB_ENV
+            echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy Dataflow Job
+        run: |
+          echo "🚀 Deploying Dataflow job to $ENV environment"
+          echo "Using bucket: $BUCKET"
+          echo "✅ Deployment complete for $ENV"
