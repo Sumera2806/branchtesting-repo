@@ -1,24 +1,27 @@
-name: Deploy Dataflow to Dev & QA
+name: Deploy Dataflow (Manual Env Choice)
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select the target environment"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - qa
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [dev, qa]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Simulate Deployment
+      - name: Set environment variables
         run: |
-          echo "🚀 Deploying Dataflow job to ${{ matrix.env }} environment"
-          echo "Branch: ${{ github.ref_name }}"
-          sleep 1
-          echo "✅ Deployment complete for ${{ matrix.env }}"
+          if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
+          elif [[ "${{ github.event.inputs.en]()]()
