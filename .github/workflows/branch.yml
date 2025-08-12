@@ -1,7 +1,12 @@
 name: Test Dataflow Deployment (Matrix)
 
 on:
-  workflow_dispatch: # lets you trigger it manually
+  push:
+    branches:
+      - dev
+      - qa
+  workflow_dispatch: # lets you trigger manually too
+
 
 jobs:
   deploy:
