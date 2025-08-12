@@ -34,23 +34,4 @@ jobs:
             echo "SA_KEY=${{ secrets.GCP_QA_SA_KEY }}" >> $GITHUB_ENV
           fi
 
-      # Authenticate to GCP
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ env.SA_KEY }}
-
-      # Set up gcloud CLI
-      - name: Set up gcloud CLI
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ env.GCP_PROJECT }}
-
-      # Deploy the Dataflow job
-      - name: Deploy Dataflow Job
-        run: |
-          echo "🚀 Deploying Dataflow job to $ENV environment"
-          gcloud dataflow jobs run my-job-$ENV \
-            --gcs-location=$BUCKET/templates/my-template-file \
-            --region=us-central1
-          echo "✅ Deployment complete for $ENV"
+     
