@@ -26,7 +26,7 @@ jobs:
       - name: Verify environment variables
         run: |
           echo "ENV: $ENV"
-          echo "PROJECT_ID: ${{ secrets.PROJECT_ID }}"
+          echo "PROJECT_ID: ${{ vars.PROJECT_ID }}"
           echo "REGION: ${{ secrets.REGION }}"
           echo "SA_EMAIL: ${{ secrets.SA_EMAIL }}"
           echo "BUCKET: ${{ secrets.BUCKET }}"
