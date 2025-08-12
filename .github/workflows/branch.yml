@@ -1,26 +1,31 @@
-name: Test Dataflow Deployment (Matrix)
+name: Deploy Dataflow Based on Branch
 
 on:
   push:
     branches:
       - dev
       - qa
-  workflow_dispatch: # lets you trigger manually too
-
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [dev, qa] # will run both in parallel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Simulate Deployment
+      - name: Set environment variables based on branch
         run: |
-          echo "Deploying Dataflow job to ${{ matrix.env }} environment"
-          echo "Branch: ${{ github.ref_name }}"
-          
-          echo "Deployment simulation complete for ${{ matrix.env }}"
+          if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF_NAME}" == "qa" ]]; then
+            echo "ENV=qa" >> $GITHUB_ENV
+            echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy Dataflow Job
+        run: |
+          echo "🚀 Deploying Dataflow job to $ENV environment"
+          echo "Using bucket: $BUCKET"
+          echo "✅ Deployment complete for $ENV"
