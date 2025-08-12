@@ -1,4 +1,4 @@
-name: Deploy Dataflow (Manual Env Choice)
+name: Deploy Dataflow
 
 on:
   workflow_dispatch:
@@ -18,27 +18,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Set environment-specific variables
       - name: Set environment variables
         run: |
           echo "🌍 Selected environment: ${{ github.event.inputs.environment }}"
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
-            echo "PROJECT_ID=my-dev-project" >> $GITHUB_ENV
-            echo "REGION=us-central1" >> $GITHUB_ENV
-            echo "SA_EMAIL=dev-sa@my-dev-project.iam.gserviceaccount.com" >> $GITHUB_ENV
-            echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
-            echo "SA_KEY=dev-secret" >> $GITHUB_ENV
+            echo "PROJECT_ID=${{ secrets.GCP_DEV_PROJECT_ID }}" >> $GITHUB_ENV
+            echo "REGION=${{ secrets.GCP_DEV_REGION }}" >> $GITHUB_ENV
+            echo "SA_EMAIL=${{ secrets.GCP_DEV_SA_EMAIL }}" >> $GITHUB_ENV
+            echo "BUCKET=${{ secrets.GCP_DEV_BUCKET }}" >> $GITHUB_ENV
           else
             echo "ENV=qa" >> $GITHUB_ENV
-            echo "PROJECT_ID=my-qa-project" >> $GITHUB_ENV
-            echo "REGION=us-central1" >> $GITHUB_ENV
-            echo "SA_EMAIL=qa-sa@my-qa-project.iam.gserviceaccount.com" >> $GITHUB_ENV
-            echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
-            echo "SA_KEY=qa-secret" >> $GITHUB_ENV
+            echo "PROJECT_ID=${{ secrets.GCP_QA_PROJECT_ID }}" >> $GITHUB_ENV
+            echo "REGION=${{ secrets.GCP_QA_REGION }}" >> $GITHUB_ENV
+            echo "SA_EMAIL=${{ secrets.GCP_QA_SA_EMAIL }}" >> $GITHUB_ENV
+            echo "BUCKET=${{ secrets.GCP_QA_BUCKET }}" >> $GITHUB_ENV
           fi
 
-      # Test using the variables
       - name: Verify environment variables are available
         run: |
           echo "✅ ENV: $ENV"
@@ -46,4 +42,3 @@ jobs:
           echo "✅ REGION: $REGION"
           echo "✅ SA_EMAIL: $SA_EMAIL"
           echo "✅ BUCKET: $BUCKET"
-          echo "✅ SA_KEY: $SA_KEY"
