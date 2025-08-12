@@ -1,3 +1,16 @@
+name: Deploy Dataflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Choose environment"
+        required: true
+        default: dev
+        type: choice
+        options:
+          - dev
+          - qa
 jobs:
   deploy:
     runs-on: ubuntu-latest
