@@ -1,39 +1,17 @@
-name: Deploy Dataflow
-
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "Select the target environment"
-        required: true
-        default: dev
-        type: choice
-        options:
-          - dev
-          - qa
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }} # uses dev or qa env
     steps:
       - uses: actions/checkout@v4
 
       - name: Set environment variables
         run: |
-          echo " Selected environment: ${{ github.event.inputs.environment }}"
-          if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
-            echo "ENV=dev" >> $GITHUB_ENV
-            echo "PROJECT_ID=${{ secrets.GCP_DEV_PROJECT_ID }}" >> $GITHUB_ENV
-            echo "REGION=${{ secrets.GCP_DEV_REGION }}" >> $GITHUB_ENV
-            echo "SA_EMAIL=${{ secrets.GCP_DEV_SA_EMAIL }}" >> $GITHUB_ENV
-            echo "BUCKET=${{ secrets.GCP_DEV_BUCKET }}" >> $GITHUB_ENV
-          else
-            echo "ENV=qa" >> $GITHUB_ENV
-            echo "PROJECT_ID=${{ secrets.GCP_QA_PROJECT_ID }}" >> $GITHUB_ENV
-            echo "REGION=${{ secrets.GCP_QA_REGION }}" >> $GITHUB_ENV
-            echo "SA_EMAIL=${{ secrets.GCP_QA_SA_EMAIL }}" >> $GITHUB_ENV
-            echo "BUCKET=${{ secrets.GCP_QA_BUCKET }}" >> $GITHUB_ENV
-          fi
+          echo "ENV=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          echo "PROJECT_ID=${{ secrets.PROJECT_ID }}" >> $GITHUB_ENV
+          echo "REGION=${{ secrets.REGION }}" >> $GITHUB_ENV
+          echo "SA_EMAIL=${{ secrets.SA_EMAIL }}" >> $GITHUB_ENV
+          echo "BUCKET=${{ secrets.BUCKET }}" >> $GITHUB_ENV
 
       - name: Verify environment variables are available
         run: |
