@@ -17,4 +17,5 @@ jobs:
         run: |
           echo "Deploying Dataflow job to ${{ matrix.env }} environment"
           echo "Branch: ${{ github.ref_name }}"
+          step1:
           echo "Deployment simulation complete for ${{ matrix.env }}"
