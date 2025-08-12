@@ -16,22 +16,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Checkout code
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # Set environment variables based on the choice
       - name: Set environment variables
         run: |
+          echo "Running with environment: ${{ github.event.inputs.environment }}"
+
           if [[ "${{ github.event.inputs.environment }}" == "dev" ]]; then
             echo "ENV=dev" >> $GITHUB_ENV
             echo "GCP_PROJECT=my-dev-project" >> $GITHUB_ENV
             echo "BUCKET=gs://dev-bucket" >> $GITHUB_ENV
-            echo "SA_KEY=${{ secrets.GCP_DEV_SA_KEY }}" >> $GITHUB_ENV
+            echo "SA_KEY=dev-secret" >> $GITHUB_ENV
           else
             echo "ENV=qa" >> $GITHUB_ENV
             echo "GCP_PROJECT=my-qa-project" >> $GITHUB_ENV
             echo "BUCKET=gs://qa-bucket" >> $GITHUB_ENV
-            echo "SA_KEY=${{ secrets.GCP_QA_SA_KEY }}" >> $GITHUB_ENV
+            echo "SA_KEY=qa-secret" >> $GITHUB_ENV
           fi
 
-     
+          echo "Variables set in GITHUB_ENV:"
+          cat $GITHUB_ENV
